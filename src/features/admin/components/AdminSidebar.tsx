@@ -181,10 +181,10 @@ export function AdminSidebar() {
               href={item.href}
               prefetch={true}
               title={isCollapsed ? item.name : undefined}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs rounded-xl transition-colors ${
+              className={`group flex items-center justify-between px-3 py-2.5 text-xs rounded-xl transition-colors ${
                 isActive
-                  ? "bg-slate-800/90 text-white font-semibold shadow-xs border border-slate-700/60"
-                  : "text-slate-300 hover:text-white hover:bg-slate-800/40 font-medium"
+                  ? "bg-[#E05628] text-white font-bold shadow-md"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800 font-medium"
               }`}
             >
               <div className="flex items-center gap-3 min-w-0">
