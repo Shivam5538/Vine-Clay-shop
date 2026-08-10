@@ -383,6 +383,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
         description: `Status changed to ${nextStatus.toUpperCase()}`,
       });
     }
+    return true;
   },
 
   toggleTableActive: (tableId) => {
