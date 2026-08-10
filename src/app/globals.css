@@ -1,0 +1,128 @@
+@import "tailwindcss";
+
+:root {
+  --linen: #FBF6EF;
+  --white: #FFFFFF;
+  --terracotta: #C1633B;
+  --olive: #6B7548;
+  --clay: #D9BFA0;
+  --sand: #D9BFA0;
+  --umber: #33241A;
+
+  /* Desaturated Warm Neutrals Scale for Admin UI */
+  --warm-neutral-50: #FAF8F5;
+  --warm-neutral-100: #F3EEE7;
+  --warm-neutral-200: #E8DFD5;
+  --warm-neutral-300: #D9CEC1;
+  --warm-neutral-400: #B8A99A;
+  --warm-neutral-500: #8C7B6E;
+  --warm-neutral-600: #66584C;
+  --warm-neutral-700: #4D3F35;
+  --warm-neutral-800: #3D3027;
+  --warm-neutral-900: #291D15;
+}
+
+@theme inline {
+  --color-linen: #FBF6EF;
+  --color-white: #FFFFFF;
+  --color-terracotta: #C1633B;
+  --color-olive: #6B7548;
+  --color-clay: #D9BFA0;
+  --color-sand: #D9BFA0;
+  --color-umber: #33241A;
+
+  --color-warm-50: #FAF8F5;
+  --color-warm-100: #F3EEE7;
+  --color-warm-200: #E8DFD5;
+  --color-warm-300: #D9CEC1;
+  --color-warm-400: #B8A99A;
+  --color-warm-500: #8C7B6E;
+  --color-warm-600: #66584C;
+  --color-warm-700: #4D3F35;
+  --color-warm-800: #3D3027;
+  --color-warm-900: #291D15;
+
+  --font-fraunces: var(--font-fraunces), serif;
+  --font-sans: var(--font-dm-sans), sans-serif;
+  --font-mono: var(--font-dm-mono), monospace;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #FBF6EF;
+}
+::-webkit-scrollbar-thumb {
+  background: #D9CEC1;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C1633B;
+}
+
+/* Typography Utilities */
+.font-fraunces {
+  font-family: var(--font-fraunces), serif;
+}
+.font-mono {
+  font-family: var(--font-dm-mono), monospace;
+}
+
+/* Admin UI Input Focus Ring */
+.admin-input {
+  background-color: #FFFFFF;
+  border: 1px solid #E8DFD5;
+  border-radius: 0.375rem;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #33241A;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.admin-input:focus {
+  outline: none;
+  border-color: #C1633B;
+  box-shadow: 0 0 0 3px rgba(193, 99, 59, 0.15);
+}
+
+/* Flash effect on row/card status change (Section 7) */
+@keyframes statusFlash {
+  0% { background-color: rgba(193, 99, 59, 0.15); }
+  100% { background-color: transparent; }
+}
+.animate-status-flash {
+  animation: statusFlash 0.3s ease-out;
+}
+
+/* Clip path text wipe animation helper */
+.clip-paragraph {
+  clip-path: polygon(0 0, 100% 0, 100% 0, 0 0);
+  transition: clip-path 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translateY(16px);
+}
+.clip-paragraph.is-visible {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: translateY(0);
+}

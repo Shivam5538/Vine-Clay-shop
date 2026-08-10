@@ -1,0 +1,267 @@
+// Prisma Schema for Vine & Clay Cafe & Admin System
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  owner
+  manager
+  staff
+}
+
+enum OrderStatus {
+  received
+  preparing
+  ready
+  completed
+  cancelled
+}
+
+enum OrderType {
+  dine_in
+  pickup
+  delivery
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  refunded
+  failed
+}
+
+enum BookingStatus {
+  pending
+  confirmed
+  seated
+  completed
+  cancelled
+  no_show
+}
+
+enum BookingSource {
+  online
+  phone
+  walk_in
+}
+
+enum DietaryTag {
+  vegan
+  vegetarian
+  gluten_free
+  dairy_free
+  nut_free
+}
+
+model Location {
+  id           String             @id @default(uuid())
+  name         String
+  slug         String             @unique
+  address      String
+  latitude     Float
+  longitude    Float
+  phone        String
+  hours        Json               // Weekly schedule: { mon: { open: "07:00", close: "18:00" }, ... }
+  capacity     Int
+  timezone     String             @default("America/New_York")
+  active       Boolean            @default(true)
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
+
+  tables       Table[]
+  menuItems    MenuItemOverride[]
+  orders       Order[]
+  bookings     Booking[]
+  staffUsers   StaffLocation[]
+
+  @@map("locations")
+}
+
+model Table {
+  id         String   @id @default(uuid())
+  locationId String   @map("location_id")
+  number     String
+  seatCount  Int      @map("seat_count")
+  isOutdoor  Boolean  @default(false) @map("is_outdoor")
+  active     Boolean  @default(true)
+  positionX  Float    @default(0)   @map("position_x")
+  positionY  Float    @default(0)   @map("position_y")
+  width      Float    @default(80)
+  height     Float    @default(80)
+  shape      String   @default("rectangle")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  location   Location  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  bookings   Booking[]
+
+  @@unique([locationId, number])
+  @@map("tables")
+}
+
+model MenuCategory {
+  id          String     @id @default(uuid())
+  name        String
+  slug        String     @unique
+  description String?
+  orderIndex  Int        @default(0) @map("order_index")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  items       MenuItem[]
+
+  @@map("menu_categories")
+}
+
+model MenuItem {
+  id           String             @id @default(uuid())
+  categoryId   String             @map("category_id")
+  name         String
+  description  String
+  basePrice    Decimal            @map("base_price") @db.Decimal(10, 2)
+  image        String
+  blurDataUrl  String?            @map("blur_data_url")
+  dietaryTags  DietaryTag[]       @map("dietary_tags")
+  isAvailable  Boolean            @default(true) @map("is_available")
+  orderIndex   Int                @default(0) @map("order_index")
+  createdAt    DateTime           @default(now()) @map("created_at")
+  updatedAt    DateTime           @updatedAt @map("updated_at")
+
+  category     MenuCategory       @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  overrides    MenuItemOverride[]
+  orderItems   OrderItem[]
+
+  @@map("menu_items")
+}
+
+model MenuItemOverride {
+  id          String   @id @default(uuid())
+  locationId  String   @map("location_id")
+  menuItemId  String   @map("menu_item_id")
+  customPrice Decimal? @map("custom_price") @db.Decimal(10, 2)
+  isAvailable Boolean  @default(true) @map("is_available")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  location    Location @relation(fields: [locationId], references: [id], onDelete: Cascade)
+  menuItem    MenuItem @relation(fields: [menuItemId], references: [id], onDelete: Cascade)
+
+  @@unique([locationId, menuItemId])
+  @@map("menu_item_overrides")
+}
+
+model Order {
+  id             String        @id @default(uuid())
+  locationId     String        @map("location_id")
+  orderNumber    String        @unique @map("order_number")
+  customerName   String        @map("customer_name")
+  customerPhone  String        @map("customer_phone")
+  customerEmail  String?       @map("customer_email")
+  orderType      OrderType     @default(pickup) @map("order_type")
+  status         OrderStatus   @default(received)
+  paymentStatus  PaymentStatus @default(pending) @map("payment_status")
+  subtotal       Decimal       @db.Decimal(10, 2)
+  tax            Decimal       @db.Decimal(10, 2)
+  total          Decimal       @db.Decimal(10, 2)
+  notes          String?
+  stripeId       String?       @map("stripe_id")
+  receivedAt     DateTime      @default(now()) @map("received_at")
+  preparingAt    DateTime?     @map("preparing_at")
+  readyAt        DateTime?     @map("ready_at")
+  completedAt    DateTime?     @map("completed_at")
+  cancelledAt    DateTime?     @map("cancelled_at")
+
+  location       Location      @relation(fields: [locationId], references: [id])
+  items          OrderItem[]
+  activityLogs   ActivityLog[]
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  orderId    String   @map("order_id")
+  menuItemId String   @map("menu_item_id")
+  quantity   Int
+  unitPrice  Decimal  @map("unit_price") @db.Decimal(10, 2)
+  totalPrice Decimal  @map("total_price") @db.Decimal(10, 2)
+  notes      String?
+
+  order      Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItem   MenuItem @relation(fields: [menuItemId], references: [id])
+
+  @@map("order_items")
+}
+
+model Booking {
+  id              String        @id @default(uuid())
+  locationId      String        @map("location_id")
+  tableId         String?       @map("table_id")
+  bookingRef      String        @unique @map("booking_ref")
+  customerName    String        @map("customer_name")
+  customerEmail   String        @map("customer_email")
+  customerPhone   String        @map("customer_phone")
+  partySize       Int           @map("party_size")
+  dateTime        DateTime      @map("date_time")
+  durationMinutes Int           @default(90) @map("duration_minutes")
+  status          BookingStatus @default(pending)
+  source          BookingSource @default(online)
+  specialRequests String?       @map("special_requests")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  location        Location      @relation(fields: [locationId], references: [id])
+  table           Table?        @relation(fields: [tableId], references: [id])
+  activityLogs    ActivityLog[]
+
+  @@map("bookings")
+}
+
+model StaffUser {
+  id        String          @id @default(uuid())
+  authUserId String?        @unique @map("auth_user_id") // References Supabase auth.users.id
+  email     String          @unique
+  name      String
+  role      Role            @default(staff)
+  avatarUrl String?         @map("avatar_url")
+  active    Boolean         @default(true)
+  createdAt DateTime        @default(now()) @map("created_at")
+  updatedAt DateTime        @updatedAt @map("updated_at")
+
+  locations StaffLocation[]
+  activity  ActivityLog[]
+
+  @@map("staff_users")
+}
+
+model StaffLocation {
+  staffUserId String    @map("staff_user_id")
+  locationId  String    @map("location_id")
+
+  staffUser   StaffUser @relation(fields: [staffUserId], references: [id], onDelete: Cascade)
+  location    Location  @relation(fields: [locationId], references: [id], onDelete: Cascade)
+
+  @@id([staffUserId, locationId])
+  @@map("staff_locations")
+}
+
+model ActivityLog {
+  id         String   @id @default(uuid())
+  userId     String?  @map("user_id")
+  userName   String   @map("user_name")
+  action     String
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  payload    Json?
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  user       StaffUser? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  order      Order?     @relation(fields: [entityId], references: [id], onDelete: Cascade, map: "fk_activity_log_order")
+  booking    Booking?   @relation(fields: [entityId], references: [id], onDelete: Cascade, map: "fk_activity_log_booking")
+
+  @@map("activity_logs")
+}
