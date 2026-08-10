@@ -179,8 +179,9 @@ export function AdminSidebar() {
             <Link
               key={item.name}
               href={item.href}
+              prefetch={true}
               title={isCollapsed ? item.name : undefined}
-              className={`flex items-center justify-between px-3 py-2.5 text-xs rounded-xl transition-all ${
+              className={`flex items-center justify-between px-3 py-2.5 text-xs rounded-xl transition-colors ${
                 isActive
                   ? "bg-slate-800/90 text-white font-semibold shadow-xs border border-slate-700/60"
                   : "text-slate-300 hover:text-white hover:bg-slate-800/40 font-medium"

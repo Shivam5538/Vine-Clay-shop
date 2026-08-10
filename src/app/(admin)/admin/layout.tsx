@@ -30,7 +30,7 @@ export default function AdminLayout({
         <AdminHeader />
 
         {/* Dynamic Page Content */}
-        <main className="flex-1 p-6 overflow-y-auto">{children}</main>
+        <main className="flex-1 p-6 overflow-y-scroll">{children}</main>
       </div>
 
       {/* Floating Drawers & Modals */}
