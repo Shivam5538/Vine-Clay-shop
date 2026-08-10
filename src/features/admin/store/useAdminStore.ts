@@ -515,6 +515,13 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     });
   },
 
+  updateStaffUser: (userId, data) =>
+    set((state) => ({
+      staffUsers: state.staffUsers.map((u) =>
+        u.id === userId ? { ...u, ...data } : u
+      ),
+    })),
+
   markInquiryRead: (inquiryId) => {
     const { inquiries } = get();
     set({
