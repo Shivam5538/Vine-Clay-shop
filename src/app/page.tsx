@@ -6,6 +6,7 @@ import { CartDrawer } from "@/components/navigation/CartDrawer";
 import { ReservationModal } from "@/components/navigation/ReservationModal";
 import { MobileStickyBar } from "@/components/navigation/MobileStickyBar";
 import { ToastContainer } from "@/components/ui/ToastContainer";
+import { CoffeePreloader } from "@/components/ui/CoffeePreloader";
 
 import { HeroSection } from "@/features/hero/HeroSection";
 import { IngredientMarquee } from "@/features/marquee/IngredientMarquee";
@@ -50,6 +51,9 @@ export default function Home() {
   return (
     <SmoothScrollProvider>
       <div className="relative min-h-screen bg-[#FBF6EF] text-[#33241A] selection:bg-[#C1633B] selection:text-[#FBF6EF]">
+        {/* Artisan Coffee Preloader */}
+        <CoffeePreloader />
+
         {/* Navigation & Modals */}
         <Navbar />
         <CartDrawer />
