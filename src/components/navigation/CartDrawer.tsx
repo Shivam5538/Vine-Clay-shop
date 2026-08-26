@@ -88,10 +88,13 @@ export function CartDrawer() {
 
       setIsSubmitting(false);
 
-      if (!result.success) {
+      if (!result.success || !result.order) {
         setErrorMessage(result.error || "Failed to place order. Please try again.");
         return;
       }
+
+      // Sync into admin store immediately so admin dashboard shows the live ticket
+      useAdminStore.getState().addOrderToStore(result.order as any);
 
       setIsSuccess(true);
       addToast(

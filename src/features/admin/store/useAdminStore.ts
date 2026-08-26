@@ -94,6 +94,7 @@ interface AdminState {
     orders?: AdminOrder[];
   }) => void;
   addBookingToStore: (booking: AdminBooking) => void;
+  addOrderToStore: (order: AdminOrder) => void;
 
   // Data Mutators (Optimistic UI)
   updateOrderStatus: (orderId: string, nextStatus: OrderStatus) => boolean;
@@ -195,6 +196,18 @@ export const useAdminStore = create<AdminState>((set, get) => ({
     set((state) => ({
       bookings: [booking, ...state.bookings.filter((b) => b.id !== booking.id)],
     }));
+  },
+
+  addOrderToStore: (order) => {
+    set((state) => ({
+      orders: [order, ...state.orders.filter((o) => o.id !== order.id)],
+    }));
+    get().logActivity(
+      "New Order Placed",
+      "order",
+      order.id,
+      `Order ${order.orderNumber} placed for ${order.customerName} ($${order.total.toFixed(2)})`
+    );
   },
 
   setActiveLocationId: (id) => set({ activeLocationId: id }),

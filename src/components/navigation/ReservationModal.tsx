@@ -87,24 +87,24 @@ export function ReservationModal() {
       return;
     }
 
-    // DB succeeded — push the real Supabase row into the admin store
-    const b = serverResult.booking;
+    // Push booking into the admin store
+    const b: any = serverResult.booking;
     adminStore.addBookingToStore({
       id: b.id,
-      bookingRef: b.booking_ref ?? `RES-${String(b.id).slice(0, 6)}`,
-      locationId: b.location_id,
-      tableId: b.table_id ?? undefined,
+      bookingRef: b.bookingRef ?? b.booking_ref ?? `RES-${String(b.id).slice(0, 6)}`,
+      locationId: b.locationId ?? b.location_id ?? locationId,
+      tableId: b.tableId ?? b.table_id ?? suitableTable?.id,
       tableName: suitableTable?.number ?? undefined,
-      customerName: b.customer_name,
-      customerEmail: b.customer_email ?? "",
-      customerPhone: b.customer_phone ?? "",
-      partySize: b.party_size,
-      dateTime: b.date_time,
-      durationMinutes: b.duration_minutes ?? 90,
-      status: b.status as AdminBookingStatus,
-      source: b.source as AdminBookingSource,
-      specialRequests: b.special_requests ?? undefined,
-      createdAt: b.created_at ?? new Date().toISOString(),
+      customerName: b.customerName ?? b.customer_name ?? formData.name,
+      customerEmail: b.customerEmail ?? b.customer_email ?? formData.email,
+      customerPhone: b.customerPhone ?? b.customer_phone ?? formData.phone,
+      partySize: b.partySize ?? b.party_size ?? Number(formData.guests),
+      dateTime: b.dateTime ?? b.date_time ?? dateTime,
+      durationMinutes: b.durationMinutes ?? b.duration_minutes ?? 90,
+      status: (b.status as AdminBookingStatus) || "confirmed",
+      source: (b.source as AdminBookingSource) || "online",
+      specialRequests: b.specialRequests ?? b.special_requests ?? specialRequests,
+      createdAt: b.createdAt ?? b.created_at ?? new Date().toISOString(),
     });
 
     setConfirmed(true);
