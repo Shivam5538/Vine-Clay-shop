@@ -2,17 +2,16 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { SteamAnimation } from "./SteamAnimation";
 
 interface CoffeePreloaderProps {
   onComplete?: () => void;
 }
 
-const BREW_STAGES = [
-  { step: "01", label: "SINGLE-ORIGIN BEANS", detail: "Ethically Harvested • Ethiopia & Colombia" },
-  { step: "02", label: "WHEEL-THROWN CLAY", detail: "High-Fire Stoneware • Soho Studio" },
-  { step: "03", label: "SLOW EXTRACTION", detail: "93°C Water • 1:16 Pourover Ratio" },
-  { step: "04", label: "UNHURRIED MOMENT", detail: "Crafted with endless patience." },
+const LUXURY_PHRASES = [
+  "The art of the unhurried cup.",
+  "Hand-thrown stoneware & single-origin beans.",
+  "Slow extraction • Pure patience.",
+  "Welcome to Vine & Clay.",
 ];
 
 export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
@@ -23,6 +22,7 @@ export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
+    // Progress counter animation (~1.8s)
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -31,11 +31,11 @@ export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
             setIsFinished(true);
             document.body.style.overflow = originalOverflow;
             if (onComplete) onComplete();
-          }, 450);
+          }, 400);
           return 100;
         }
-        const step = Math.floor(Math.random() * 9) + 6;
-        return Math.min(prev + step, 100);
+        const increment = Math.floor(Math.random() * 8) + 6;
+        return Math.min(prev + increment, 100);
       });
     }, 75);
 
@@ -45,238 +45,207 @@ export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
     };
   }, [onComplete]);
 
-  const currentStageIndex = Math.min(Math.floor(progress / 26), 3);
-  const stage = BREW_STAGES[currentStageIndex];
+  const phraseIndex = Math.min(Math.floor(progress / 26), LUXURY_PHRASES.length - 1);
 
   return (
     <AnimatePresence mode="wait">
       {!isFinished && (
-        <div className="fixed inset-0 z-[99999] pointer-events-none select-none font-sans overflow-hidden">
-          {/* 4 Staggered Architectural Slat Curtains for Exit Reveal */}
-          <div className="absolute inset-0 flex">
-            {[0, 1, 2, 3].map((col) => (
-              <motion.div
-                key={`slat-${col}`}
-                initial={{ y: 0 }}
-                exit={{
-                  y: "-100%",
-                  transition: {
-                    duration: 0.9,
-                    delay: col * 0.08,
-                    ease: [0.76, 0, 0.24, 1],
-                  },
-                }}
-                className={`flex-1 h-full ${
-                  col % 2 === 0 ? "bg-[#1E150F]" : "bg-[#251A13]"
-                } border-r border-[#33241A]/30`}
-              />
-            ))}
+        <motion.div
+          key="luxury-espresso-preloader"
+          initial={{ opacity: 1 }}
+          exit={{
+            clipPath: [
+              "circle(100% at 50% 50%)",
+              "circle(0% at 50% 50%)",
+            ],
+            opacity: [1, 0],
+            transition: { duration: 0.85, ease: [0.77, 0, 0.175, 1] },
+          }}
+          className="fixed inset-0 z-[99999] flex flex-col items-center justify-between p-8 sm:p-12 bg-[#17100A] text-[#FBF6EF] overflow-hidden select-none font-sans"
+        >
+          {/* Subtle Ambient Golden Warmth Aura */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(193,99,59,0.18)_0%,rgba(217,191,160,0.04)_50%,transparent_75%)] pointer-events-none" />
+
+          {/* Top Brand Minimalist Header */}
+          <div className="w-full max-w-4xl flex items-center justify-between text-[11px] font-mono tracking-[0.25em] text-[#D9BFA0]/60 uppercase z-10">
+            <span className="text-[#FBF6EF] font-medium tracking-[0.3em]">Vine &amp; Clay</span>
+            <span className="hidden sm:inline">Ceramic Studio &amp; Specialty Bar</span>
+            <span className="text-[#C1633B]">Soho, NY</span>
           </div>
 
-          {/* Main Visual Content Layer */}
-          <motion.div
-            key="preloader-content"
-            initial={{ opacity: 1 }}
-            exit={{
-              opacity: 0,
-              scale: 0.96,
-              transition: { duration: 0.4, ease: "easeOut" },
-            }}
-            className="absolute inset-0 flex flex-col items-center justify-between p-6 sm:p-10 pointer-events-auto z-10 text-[#FBF6EF]"
-          >
-            {/* Top Brand & Coordinates Header */}
-            <div className="w-full max-w-5xl flex items-center justify-between text-[10px] font-mono tracking-[0.2em] text-[#D9BFA0]/70 uppercase">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-[#C1633B] animate-ping" />
-                <span className="font-semibold text-[#FBF6EF]">Vine &amp; Clay</span>
-              </div>
-              <div className="hidden sm:block text-[#D9BFA0]/50">
-                40.7241° N, 73.9982° W • SOHO NY
-              </div>
-              <div className="text-[#C1633B] font-bold">EST. 2024</div>
-            </div>
+          {/* Centerpiece: Minimalist Luxury Espresso Wave Vessel */}
+          <div className="relative flex flex-col items-center justify-center my-auto z-10">
+            {/* Ambient Golden Steam Strands */}
+            <div className="relative w-36 h-48 flex items-center justify-center">
+              {/* Animated Floating Steam Trails */}
+              <svg
+                viewBox="0 0 100 120"
+                className="absolute -top-6 w-20 h-24 overflow-visible pointer-events-none"
+                fill="none"
+              >
+                <motion.path
+                  d="M42 90 C34 65 55 40 45 15 C40 5 45 0 42 -5"
+                  stroke="#D9BFA0"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0, opacity: 0.1 }}
+                  animate={{
+                    pathLength: [0, 0.7, 0],
+                    pathOffset: [1, 0, -0.3],
+                    opacity: [0.1, 0.6, 0],
+                  }}
+                  transition={{ duration: 2.4, repeat: Infinity, ease: "easeInOut" }}
+                />
+                <motion.path
+                  d="M58 95 C68 70 48 45 56 20 C60 10 55 0 58 -5"
+                  stroke="#C1633B"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0, opacity: 0.1 }}
+                  animate={{
+                    pathLength: [0, 0.6, 0],
+                    pathOffset: [1, 0, -0.3],
+                    opacity: [0.1, 0.5, 0],
+                  }}
+                  transition={{ duration: 2.8, delay: 0.5, repeat: Infinity, ease: "easeInOut" }}
+                />
+              </svg>
 
-            {/* Centerpiece Visuals: Modern Radial Brew Engine */}
-            <div className="flex flex-col items-center justify-center my-auto relative">
-              {/* Pulsing Concentric Aura Glows */}
-              <div className="absolute -inset-16 rounded-full bg-[radial-gradient(circle,rgba(193,99,59,0.25)_0%,rgba(107,117,72,0.1)_45%,transparent_70%)] blur-2xl pointer-events-none" />
+              {/* Minimalist Ceramic Vessel with Liquid Wave */}
+              <svg
+                viewBox="0 0 120 140"
+                className="w-32 h-36 overflow-visible"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                {/* Vessel Soft Shadow Grounding */}
+                <ellipse cx="60" cy="132" rx="36" ry="5" fill="#0D0805" opacity="0.8" />
 
-              {/* Holographic Circular Extraction Ring */}
-              <div className="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
-                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
-                  {/* Track Background */}
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="44"
-                    fill="none"
-                    stroke="#38291F"
-                    strokeWidth="2.5"
-                  />
-                  {/* Neon Glowing Progress Arc */}
-                  <motion.circle
-                    cx="50"
-                    cy="50"
-                    r="44"
-                    fill="none"
-                    stroke="url(#gradient-ring)"
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeDasharray={2 * Math.PI * 44}
-                    strokeDashoffset={2 * Math.PI * 44 * (1 - progress / 100)}
-                    transition={{ ease: "easeOut", duration: 0.15 }}
-                  />
-                  <defs>
-                    <linearGradient id="gradient-ring" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#D9BFA0" />
-                      <stop offset="50%" stopColor="#C1633B" />
-                      <stop offset="100%" stopColor="#E07A4F" />
-                    </linearGradient>
-                  </defs>
-                </svg>
+                {/* Vessel Exterior Body (Stoneware Matte Finish) */}
+                <path
+                  d="M26 32 C26 95 38 126 60 126 C82 126 94 95 94 32 Z"
+                  fill="#1C130D"
+                  stroke="#D9BFA0"
+                  strokeWidth="1.75"
+                />
 
-                {/* Inner Floating Artisan Ceramic Mug + Steam */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  {/* Steam Rising Animation */}
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <SteamAnimation color="#D9BFA0" />
-                  </div>
+                {/* Subtle Ceramic Texture Rim Line */}
+                <ellipse cx="60" cy="32" rx="34" ry="7" stroke="#D9BFA0" strokeWidth="1.5" fill="#241912" />
 
-                  {/* Modern Minimalist Coffee Mug SVG */}
-                  <svg
-                    viewBox="0 0 80 80"
-                    className="w-20 h-20 overflow-visible"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    {/* Coffee Droplet falling */}
-                    <motion.circle
-                      cx="40"
-                      cy="15"
-                      r="2"
-                      fill="#C1633B"
-                      animate={{
-                        cy: [12, 45],
-                        opacity: [0, 1, 0],
-                        scaleY: [1, 1.6, 0.6],
-                      }}
-                      transition={{
-                        duration: 0.75,
-                        repeat: Infinity,
-                        ease: "easeIn",
-                      }}
-                    />
-
-                    {/* Mug Body Ceramic Form */}
-                    <path
-                      d="M20 30 Q20 68 40 68 Q60 68 60 30 Z"
-                      fill="#150D09"
-                      stroke="#D9BFA0"
-                      strokeWidth="2"
-                    />
-
-                    {/* Liquid Fill */}
-                    <g clipPath="url(#cup-liquid-clip)">
-                      <motion.rect
-                        x="20"
-                        y="68"
-                        width="40"
-                        height="38"
-                        fill="#C1633B"
-                        animate={{
-                          y: 68 - (progress / 100) * 32,
-                        }}
-                        transition={{ ease: "easeOut", duration: 0.15 }}
-                      />
-                      {/* Top Cream/Crema line */}
-                      <motion.ellipse
-                        cx="40"
-                        cy={68 - (progress / 100) * 32}
-                        rx="16"
-                        ry="2"
-                        fill="#E07A4F"
-                      />
-                    </g>
-
-                    {/* Mug Ear Handle */}
-                    <path
-                      d="M60 35 C70 35 70 54 60 54"
-                      stroke="#D9BFA0"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-
-                    <clipPath id="cup-liquid-clip">
-                      <path d="M21 31 Q21 67 40 67 Q59 67 59 31 Z" />
-                    </clipPath>
-                  </svg>
-                </div>
-              </div>
-
-              {/* Giant Modern Monospace Percentage Counter */}
-              <div className="mt-6 flex items-baseline gap-1 font-mono">
-                <span className="text-5xl sm:text-6xl font-bold tracking-tighter text-[#FBF6EF] tabular-nums">
-                  {progress.toString().padStart(2, "0")}
-                </span>
-                <span className="text-lg font-medium text-[#C1633B] font-mono">%</span>
-              </div>
-
-              {/* Modern Audio Wave Equalizer Visualizer */}
-              <div className="flex items-center gap-1 mt-3">
-                {[4, 12, 8, 16, 10, 14, 6, 12, 18, 9, 15, 6].map((h, i) => (
-                  <motion.div
-                    key={`bar-${i}`}
-                    className="w-1 bg-[#C1633B] rounded-full"
+                {/* Liquid Wave Filling Inside Cup */}
+                <g clipPath="url(#cup-interior-clip)">
+                  {/* Base Coffee Liquid Fill */}
+                  <motion.rect
+                    x="24"
+                    y="126"
+                    width="72"
+                    height="96"
+                    fill="url(#espresso-gradient)"
                     animate={{
-                      height: [4, h, 4],
-                      opacity: [0.3, 0.9, 0.3],
+                      y: 126 - (progress / 100) * 88,
+                    }}
+                    transition={{ ease: "easeOut", duration: 0.2 }}
+                  />
+
+                  {/* Dynamic Sine Liquid Wave */}
+                  <motion.path
+                    fill="#C1633B"
+                    animate={{
+                      d: [
+                        `M 24 ${126 - (progress / 100) * 88} Q 42 ${122 - (progress / 100) * 88} 60 ${126 - (progress / 100) * 88} T 96 ${126 - (progress / 100) * 88} L 96 130 L 24 130 Z`,
+                        `M 24 ${126 - (progress / 100) * 88} Q 42 ${130 - (progress / 100) * 88} 60 ${126 - (progress / 100) * 88} T 96 ${126 - (progress / 100) * 88} L 96 130 L 24 130 Z`,
+                        `M 24 ${126 - (progress / 100) * 88} Q 42 ${122 - (progress / 100) * 88} 60 ${126 - (progress / 100) * 88} T 96 ${126 - (progress / 100) * 88} L 96 130 L 24 130 Z`,
+                      ],
                     }}
                     transition={{
-                      duration: 0.8 + (i % 3) * 0.2,
+                      duration: 1.8,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
                   />
-                ))}
-              </div>
-            </div>
 
-            {/* Bottom Section: Dynamic Stage Card + Aesthetic Quote */}
-            <div className="w-full max-w-md flex flex-col items-center text-center space-y-3">
-              {/* Stage Pill */}
-              <div className="px-3.5 py-1.5 rounded-full bg-[#33241A]/70 border border-[#D9BFA0]/25 backdrop-blur-md flex items-center gap-2.5 shadow-lg">
-                <span className="font-mono text-[10px] font-bold text-[#C1633B]">
-                  PHASE {stage.step}
-                </span>
-                <span className="w-1 h-1 rounded-full bg-[#D9BFA0]/40" />
-                <span className="font-mono text-[10px] tracking-wider text-[#FBF6EF] uppercase font-medium">
-                  {stage.label}
-                </span>
-              </div>
-
-              {/* Subtext description */}
-              <p className="text-xs text-[#D9BFA0]/80 font-sans tracking-wide">
-                {stage.detail}
-              </p>
-
-              {/* Micro dots indicator */}
-              <div className="flex items-center gap-1.5 pt-1">
-                {BREW_STAGES.map((s, idx) => (
-                  <div
-                    key={s.step}
-                    className={`h-1 transition-all duration-300 rounded-full ${
-                      idx === currentStageIndex
-                        ? "w-6 bg-[#C1633B]"
-                        : idx < currentStageIndex
-                        ? "w-2 bg-[#D9BFA0]"
-                        : "w-2 bg-[#423124]"
-                    }`}
+                  {/* Golden Crema Light Reflection */}
+                  <motion.ellipse
+                    cx="60"
+                    cy={126 - (progress / 100) * 88}
+                    rx="30"
+                    ry="5"
+                    fill="#E07A4F"
+                    opacity="0.8"
                   />
-                ))}
+                </g>
+
+                {/* Minimalist Cup Handle */}
+                <path
+                  d="M94 48 C108 48 108 84 92 84"
+                  stroke="#D9BFA0"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  fill="none"
+                />
+
+                {/* Clip Path conforming to cup interior */}
+                <clipPath id="cup-interior-clip">
+                  <path d="M27 34 C27 94 39 124 60 124 C81 124 93 94 93 34 Z" />
+                </clipPath>
+
+                {/* Liquid Color Gradient */}
+                <defs>
+                  <linearGradient id="espresso-gradient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#C1633B" />
+                    <stop offset="60%" stopColor="#8C4423" />
+                    <stop offset="100%" stopColor="#4A2210" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+
+            {/* Editorial Serif Brand Name */}
+            <div className="mt-6 text-center">
+              <h1 className="text-3xl sm:text-4xl font-fraunces font-light tracking-tight text-[#FBF6EF]">
+                Vine <span className="italic text-[#C1633B] font-serif">&amp;</span> Clay
+              </h1>
+              <p className="mt-1 text-[11px] font-mono tracking-[0.25em] text-[#D9BFA0]/70 uppercase">
+                Artisanal Pourover &amp; Ceramics
+              </p>
+            </div>
+
+            {/* Minimalist Precision Progress Line */}
+            <div className="w-56 mt-7 space-y-2.5">
+              <div className="w-full h-[2px] bg-[#33241A] rounded-full overflow-hidden relative">
+                <motion.div
+                  className="h-full bg-gradient-to-r from-[#D9BFA0] via-[#C1633B] to-[#E07A4F]"
+                  style={{ width: `${progress}%` }}
+                  transition={{ ease: "easeOut", duration: 0.15 }}
+                />
+              </div>
+
+              {/* Monospace Precision Counter */}
+              <div className="flex items-center justify-between text-[11px] font-mono text-[#D9BFA0]/70">
+                <span className="tracking-widest">EXTRACTION</span>
+                <span className="tabular-nums font-semibold text-[#FBF6EF]">
+                  {progress.toString().padStart(3, "0")}%
+                </span>
               </div>
             </div>
-          </motion.div>
-        </div>
+          </div>
+
+          {/* Bottom Dynamic Poetic Phrase Indicator */}
+          <div className="w-full max-w-md text-center z-10">
+            <AnimatePresence mode="wait">
+              <motion.p
+                key={phraseIndex}
+                initial={{ opacity: 0, y: 6 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
+                className="text-xs font-mono text-[#D9BFA0]/80 tracking-wide"
+              >
+                {LUXURY_PHRASES[phraseIndex]}
+              </motion.p>
+            </AnimatePresence>
+          </div>
+        </motion.div>
       )}
     </AnimatePresence>
   );
