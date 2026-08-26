@@ -8,16 +8,21 @@ interface CoffeePreloaderProps {
   onComplete?: () => void;
 }
 
+const BREW_STAGES = [
+  { step: "01", label: "SINGLE-ORIGIN BEANS", detail: "Ethically Harvested • Ethiopia & Colombia" },
+  { step: "02", label: "WHEEL-THROWN CLAY", detail: "High-Fire Stoneware • Soho Studio" },
+  { step: "03", label: "SLOW EXTRACTION", detail: "93°C Water • 1:16 Pourover Ratio" },
+  { step: "04", label: "UNHURRIED MOMENT", detail: "Crafted with endless patience." },
+];
+
 export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
   const [progress, setProgress] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
-    // Lock scroll during preloader
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
 
-    // Progress counter animation (~1.8 seconds total)
     const interval = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
@@ -26,14 +31,13 @@ export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
             setIsFinished(true);
             document.body.style.overflow = originalOverflow;
             if (onComplete) onComplete();
-          }, 350);
+          }, 450);
           return 100;
         }
-        // Smooth organic increments
-        const step = Math.floor(Math.random() * 8) + 6;
+        const step = Math.floor(Math.random() * 9) + 6;
         return Math.min(prev + step, 100);
       });
-    }, 85);
+    }, 75);
 
     return () => {
       clearInterval(interval);
@@ -41,185 +45,239 @@ export function CoffeePreloader({ onComplete }: CoffeePreloaderProps) {
     };
   }, [onComplete]);
 
-  const getStatusText = (prog: number) => {
-    if (prog < 25) return "Grinding single-origin beans...";
-    if (prog < 55) return "Blooming artisanal roast...";
-    if (prog < 85) return "Pouring slow extraction...";
-    return "Ready to savor.";
-  };
+  const currentStageIndex = Math.min(Math.floor(progress / 26), 3);
+  const stage = BREW_STAGES[currentStageIndex];
 
   return (
     <AnimatePresence mode="wait">
       {!isFinished && (
-        <motion.div
-          key="coffee-preloader"
-          initial={{ opacity: 1 }}
-          exit={{
-            y: "-100%",
-            transition: { duration: 0.85, ease: [0.77, 0, 0.175, 1] },
-          }}
-          className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-[#291D15] text-[#FBF6EF] overflow-hidden select-none font-sans"
-        >
-          {/* Subtle Warm Radial Ambient Background */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(193,99,59,0.22)_0%,transparent_65%)] pointer-events-none" />
+        <div className="fixed inset-0 z-[99999] pointer-events-none select-none font-sans overflow-hidden">
+          {/* 4 Staggered Architectural Slat Curtains for Exit Reveal */}
+          <div className="absolute inset-0 flex">
+            {[0, 1, 2, 3].map((col) => (
+              <motion.div
+                key={`slat-${col}`}
+                initial={{ y: 0 }}
+                exit={{
+                  y: "-100%",
+                  transition: {
+                    duration: 0.9,
+                    delay: col * 0.08,
+                    ease: [0.76, 0, 0.24, 1],
+                  },
+                }}
+                className={`flex-1 h-full ${
+                  col % 2 === 0 ? "bg-[#1E150F]" : "bg-[#251A13]"
+                } border-r border-[#33241A]/30`}
+              />
+            ))}
+          </div>
 
-          {/* Centerpiece Container */}
-          <div className="relative flex flex-col items-center max-w-sm px-6 text-center z-10">
-            {/* Coffee Pourover Craft Illustration */}
-            <div className="relative w-36 h-40 flex flex-col items-center justify-end mb-5">
-              {/* Steam rising gently */}
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                <SteamAnimation color="#D9BFA0" />
+          {/* Main Visual Content Layer */}
+          <motion.div
+            key="preloader-content"
+            initial={{ opacity: 1 }}
+            exit={{
+              opacity: 0,
+              scale: 0.96,
+              transition: { duration: 0.4, ease: "easeOut" },
+            }}
+            className="absolute inset-0 flex flex-col items-center justify-between p-6 sm:p-10 pointer-events-auto z-10 text-[#FBF6EF]"
+          >
+            {/* Top Brand & Coordinates Header */}
+            <div className="w-full max-w-5xl flex items-center justify-between text-[10px] font-mono tracking-[0.2em] text-[#D9BFA0]/70 uppercase">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#C1633B] animate-ping" />
+                <span className="font-semibold text-[#FBF6EF]">Vine &amp; Clay</span>
+              </div>
+              <div className="hidden sm:block text-[#D9BFA0]/50">
+                40.7241° N, 73.9982° W • SOHO NY
+              </div>
+              <div className="text-[#C1633B] font-bold">EST. 2024</div>
+            </div>
+
+            {/* Centerpiece Visuals: Modern Radial Brew Engine */}
+            <div className="flex flex-col items-center justify-center my-auto relative">
+              {/* Pulsing Concentric Aura Glows */}
+              <div className="absolute -inset-16 rounded-full bg-[radial-gradient(circle,rgba(193,99,59,0.25)_0%,rgba(107,117,72,0.1)_45%,transparent_70%)] blur-2xl pointer-events-none" />
+
+              {/* Holographic Circular Extraction Ring */}
+              <div className="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
+                <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+                  {/* Track Background */}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="44"
+                    fill="none"
+                    stroke="#38291F"
+                    strokeWidth="2.5"
+                  />
+                  {/* Neon Glowing Progress Arc */}
+                  <motion.circle
+                    cx="50"
+                    cy="50"
+                    r="44"
+                    fill="none"
+                    stroke="url(#gradient-ring)"
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeDasharray={2 * Math.PI * 44}
+                    strokeDashoffset={2 * Math.PI * 44 * (1 - progress / 100)}
+                    transition={{ ease: "easeOut", duration: 0.15 }}
+                  />
+                  <defs>
+                    <linearGradient id="gradient-ring" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#D9BFA0" />
+                      <stop offset="50%" stopColor="#C1633B" />
+                      <stop offset="100%" stopColor="#E07A4F" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+
+                {/* Inner Floating Artisan Ceramic Mug + Steam */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  {/* Steam Rising Animation */}
+                  <div className="absolute -top-3 left-1/2 -translate-x-1/2">
+                    <SteamAnimation color="#D9BFA0" />
+                  </div>
+
+                  {/* Modern Minimalist Coffee Mug SVG */}
+                  <svg
+                    viewBox="0 0 80 80"
+                    className="w-20 h-20 overflow-visible"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    {/* Coffee Droplet falling */}
+                    <motion.circle
+                      cx="40"
+                      cy="15"
+                      r="2"
+                      fill="#C1633B"
+                      animate={{
+                        cy: [12, 45],
+                        opacity: [0, 1, 0],
+                        scaleY: [1, 1.6, 0.6],
+                      }}
+                      transition={{
+                        duration: 0.75,
+                        repeat: Infinity,
+                        ease: "easeIn",
+                      }}
+                    />
+
+                    {/* Mug Body Ceramic Form */}
+                    <path
+                      d="M20 30 Q20 68 40 68 Q60 68 60 30 Z"
+                      fill="#150D09"
+                      stroke="#D9BFA0"
+                      strokeWidth="2"
+                    />
+
+                    {/* Liquid Fill */}
+                    <g clipPath="url(#cup-liquid-clip)">
+                      <motion.rect
+                        x="20"
+                        y="68"
+                        width="40"
+                        height="38"
+                        fill="#C1633B"
+                        animate={{
+                          y: 68 - (progress / 100) * 32,
+                        }}
+                        transition={{ ease: "easeOut", duration: 0.15 }}
+                      />
+                      {/* Top Cream/Crema line */}
+                      <motion.ellipse
+                        cx="40"
+                        cy={68 - (progress / 100) * 32}
+                        rx="16"
+                        ry="2"
+                        fill="#E07A4F"
+                      />
+                    </g>
+
+                    {/* Mug Ear Handle */}
+                    <path
+                      d="M60 35 C70 35 70 54 60 54"
+                      stroke="#D9BFA0"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+
+                    <clipPath id="cup-liquid-clip">
+                      <path d="M21 31 Q21 67 40 67 Q59 67 59 31 Z" />
+                    </clipPath>
+                  </svg>
+                </div>
               </div>
 
-              {/* Handcrafted Pourover Dripper + Stoneware Mug SVG */}
-              <svg
-                viewBox="0 0 120 120"
-                className="w-28 h-28 overflow-visible"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* 1. Ceramic Dripper Cone (Top) */}
-                <path
-                  d="M25 25 L95 25 L68 62 L52 62 Z"
-                  fill="#FBF6EF"
-                  stroke="#D9BFA0"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                />
-                {/* Dripper Ridges */}
-                <path d="M42 27 L55 58" stroke="#D9BFA0" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-                <path d="M60 27 L60 60" stroke="#D9BFA0" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
-                <path d="M78 27 L65 58" stroke="#D9BFA0" strokeWidth="1.5" strokeLinecap="round" opacity="0.6" />
+              {/* Giant Modern Monospace Percentage Counter */}
+              <div className="mt-6 flex items-baseline gap-1 font-mono">
+                <span className="text-5xl sm:text-6xl font-bold tracking-tighter text-[#FBF6EF] tabular-nums">
+                  {progress.toString().padStart(2, "0")}
+                </span>
+                <span className="text-lg font-medium text-[#C1633B] font-mono">%</span>
+              </div>
 
-                {/* Dripper Base Ring */}
-                <rect x="46" y="60" width="28" height="4" rx="2" fill="#C1633B" />
-
-                {/* 2. Falling Coffee Drops (Animated) */}
-                <motion.circle
-                  cx="60"
-                  cy="68"
-                  r="2.5"
-                  fill="#C1633B"
-                  animate={{
-                    cy: [66, 88],
-                    opacity: [0, 1, 0],
-                    scaleY: [1, 1.4, 0.8],
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    repeat: Infinity,
-                    ease: "easeIn",
-                  }}
-                />
-                <motion.circle
-                  cx="60"
-                  cy="68"
-                  r="2"
-                  fill="#C1633B"
-                  animate={{
-                    cy: [66, 88],
-                    opacity: [0, 1, 0],
-                  }}
-                  transition={{
-                    duration: 0.8,
-                    delay: 0.4,
-                    repeat: Infinity,
-                    ease: "easeIn",
-                  }}
-                />
-
-                {/* 3. Stoneware Mug (Bottom) */}
-                <path
-                  d="M34 78 Q34 110 60 110 Q86 110 86 78 Z"
-                  fill="#1C140E"
-                  stroke="#D9BFA0"
-                  strokeWidth="2"
-                  strokeLinejoin="round"
-                />
-
-                {/* Coffee Liquid Fill inside Mug */}
-                <g clipPath="url(#mug-clip-path)">
-                  <motion.rect
-                    x="34"
-                    y="110"
-                    width="52"
-                    height="32"
-                    fill="#C1633B"
+              {/* Modern Audio Wave Equalizer Visualizer */}
+              <div className="flex items-center gap-1 mt-3">
+                {[4, 12, 8, 16, 10, 14, 6, 12, 18, 9, 15, 6].map((h, i) => (
+                  <motion.div
+                    key={`bar-${i}`}
+                    className="w-1 bg-[#C1633B] rounded-full"
                     animate={{
-                      y: 110 - (progress / 100) * 26,
+                      height: [4, h, 4],
+                      opacity: [0.3, 0.9, 0.3],
                     }}
                     transition={{
-                      duration: 0.2,
-                      ease: "easeOut",
-                    }}
-                  />
-                  {/* Liquid Surface */}
-                  <motion.ellipse
-                    cx="60"
-                    cy={110 - (progress / 100) * 26}
-                    rx="22"
-                    ry="2.5"
-                    fill="#E07A4F"
-                    animate={{
-                      opacity: [0.7, 1, 0.7],
-                      scaleX: [0.95, 1.05, 0.95],
-                    }}
-                    transition={{
-                      duration: 1.2,
+                      duration: 0.8 + (i % 3) * 0.2,
                       repeat: Infinity,
                       ease: "easeInOut",
                     }}
                   />
-                </g>
-
-                {/* Mug Handle */}
-                <path
-                  d="M86 84 C98 84 98 102 85 102"
-                  stroke="#D9BFA0"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  fill="none"
-                />
-
-                {/* Mug Clip Path */}
-                <clipPath id="mug-clip-path">
-                  <path d="M35 79 Q35 109 60 109 Q85 109 85 79 Z" />
-                </clipPath>
-              </svg>
+                ))}
+              </div>
             </div>
 
-            {/* Brand Typography */}
-            <h2 className="text-2xl sm:text-3xl font-fraunces font-normal tracking-tight text-[#FBF6EF] mb-1">
-              Vine <span className="text-[#C1633B] italic font-serif">&amp;</span> Clay
-            </h2>
-            <p className="text-[11px] font-mono uppercase tracking-[0.25em] text-[#D9BFA0]/70 mb-5">
-              Unhurried Coffee &amp; Ceramic Studio
-            </p>
+            {/* Bottom Section: Dynamic Stage Card + Aesthetic Quote */}
+            <div className="w-full max-w-md flex flex-col items-center text-center space-y-3">
+              {/* Stage Pill */}
+              <div className="px-3.5 py-1.5 rounded-full bg-[#33241A]/70 border border-[#D9BFA0]/25 backdrop-blur-md flex items-center gap-2.5 shadow-lg">
+                <span className="font-mono text-[10px] font-bold text-[#C1633B]">
+                  PHASE {stage.step}
+                </span>
+                <span className="w-1 h-1 rounded-full bg-[#D9BFA0]/40" />
+                <span className="font-mono text-[10px] tracking-wider text-[#FBF6EF] uppercase font-medium">
+                  {stage.label}
+                </span>
+              </div>
 
-            {/* Progress Track */}
-            <div className="w-52 h-1 bg-[#423124] rounded-full overflow-hidden mb-3 relative shadow-inner">
-              <motion.div
-                className="h-full bg-gradient-to-r from-[#D9BFA0] via-[#C1633B] to-[#E07A4F] rounded-full"
-                style={{ width: `${progress}%` }}
-                transition={{ ease: "easeOut" }}
-              />
+              {/* Subtext description */}
+              <p className="text-xs text-[#D9BFA0]/80 font-sans tracking-wide">
+                {stage.detail}
+              </p>
+
+              {/* Micro dots indicator */}
+              <div className="flex items-center gap-1.5 pt-1">
+                {BREW_STAGES.map((s, idx) => (
+                  <div
+                    key={s.step}
+                    className={`h-1 transition-all duration-300 rounded-full ${
+                      idx === currentStageIndex
+                        ? "w-6 bg-[#C1633B]"
+                        : idx < currentStageIndex
+                        ? "w-2 bg-[#D9BFA0]"
+                        : "w-2 bg-[#423124]"
+                    }`}
+                  />
+                ))}
+              </div>
             </div>
-
-            {/* Status & Numeric Counter */}
-            <div className="flex items-center justify-between w-52 text-[10px] font-mono text-[#D9BFA0]/85">
-              <span className="truncate pr-2">{getStatusText(progress)}</span>
-              <span className="font-semibold tabular-nums text-[#C1633B]">{progress}%</span>
-            </div>
-          </div>
-
-          {/* Bottom Artisan Tag */}
-          <div className="absolute bottom-6 text-[10px] font-mono tracking-widest text-[#D9BFA0]/40 uppercase">
-            Slow Brewed in Small Batches • Soho NYC
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       )}
     </AnimatePresence>
   );
 }
-
