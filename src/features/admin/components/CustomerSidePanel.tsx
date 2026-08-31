@@ -10,9 +10,7 @@ import {
   Mail,
   ShoppingBag,
   CalendarDays,
-  DollarSign,
   Star,
-  CheckCircle2,
 } from "lucide-react";
 
 export function CustomerSidePanel() {

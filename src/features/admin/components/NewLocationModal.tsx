@@ -9,7 +9,6 @@ export function NewLocationModal() {
   const { isNewLocationOpen, setNewLocationOpen, saveLocation, currentRole, addToast } = useAdminStore();
 
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const [capacity, setCapacity] = useState(40);
@@ -49,7 +48,7 @@ export function NewLocationModal() {
     saveLocation({
       id: `loc-${Date.now()}`,
       name,
-      slug: slug || name.toLowerCase().replace(/[^a-z0-9]/g, "-"),
+      slug: name.toLowerCase().replace(/[^a-z0-9]/g, "-"),
       address,
       phone,
       capacity: Number(capacity),

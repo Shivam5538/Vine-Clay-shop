@@ -14,7 +14,6 @@ import {
   CalendarCheck,
   Plus,
   ChevronRight,
-  Filter,
 } from "lucide-react";
 import { CustomerSidePanel } from "@/features/admin/components/CustomerSidePanel";
 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useAdminStore } from "../store/useAdminStore";
 import { createBookingAction } from "../actions/bookingActions";
-import { X, User, Mail, Phone, Calendar, Clock, Users, MapPin } from "lucide-react";
+import { X } from "lucide-react";
 import { BookingSource } from "../types/admin";
 
 export function NewBookingModal() {

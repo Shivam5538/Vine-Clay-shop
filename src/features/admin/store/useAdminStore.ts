@@ -20,8 +20,6 @@ import {
   SEED_TABLES,
   SEED_CATEGORIES,
   SEED_MENU_ITEMS,
-  SEED_ORDERS,
-  SEED_BOOKINGS,
   SEED_STAFF_USERS,
   SEED_ACTIVITY_LOGS,
   SEED_CUSTOMERS,
@@ -283,7 +281,7 @@ export const useAdminStore = create<AdminState>((set, get) => ({
 
   // Order Status Update with Optimistic UI & Activity Trail
   updateOrderStatus: (orderId, nextStatus) => {
-    const { orders, currentRole, logActivity, addToast } = get();
+    const { orders, logActivity, addToast } = get();
     const targetOrder = orders.find((o) => o.id === orderId);
     if (!targetOrder) return false;
 

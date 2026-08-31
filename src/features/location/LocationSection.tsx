@@ -30,7 +30,7 @@ export function LocationSection() {
 
     if (!container) return;
 
-    let ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       // Map marker pin-drop bounce animation on first view (ease: back.out)
       if (marker) {
         gsap.fromTo(

@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { AdminBooking, AdminTable, BookingStatus } from "@/features/admin/types/admin";
+import { AdminBooking, AdminTable } from "@/features/admin/types/admin";
 import { formatTime } from "@/lib/format-date";
 import { BookingStatusBadge } from "@/features/admin/components/StatusBadge";
 import { useAdminStore } from "@/features/admin/store/useAdminStore";
@@ -66,7 +66,7 @@ export function AgendaView({ bookings, tables }: AgendaViewProps) {
       <div className="p-5 border-b border-slate-100 bg-slate-50 flex items-center justify-between">
         <div>
           <h3 className="font-bold text-lg text-slate-900">Agenda View</h3>
-          <p className="text-xs text-slate-500 font-medium mt-0.5">Chronological list of today's reservations</p>
+          <p className="text-xs text-slate-500 font-medium mt-0.5">Chronological list of today&apos;s reservations</p>
         </div>
         <div className="text-sm font-bold text-purple-600 bg-purple-50 px-3 py-1.5 rounded-lg border border-purple-100">
           {bookings.length} Total

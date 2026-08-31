@@ -39,14 +39,12 @@ export function SignatureTicker({ id, sentence }: SignatureTickerProps) {
 
     if (!container || !track) return;
 
-    let ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       const calcDistance = () => {
         const trackWidth = track.scrollWidth;
         const windowWidth = window.innerWidth;
         return Math.max(0, trackWidth - windowWidth + 120);
       };
-
-      const distance = calcDistance();
 
       // Main pin & horizontal scroll timeline
       const tl = gsap.timeline({

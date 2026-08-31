@@ -19,7 +19,7 @@ export function StorySection() {
 
     if (!section || !imgBox) return;
 
-    let ctx = gsap.context(() => {
+    const ctx = gsap.context(() => {
       // Gentle parallax on image (0.85x scroll speed relative to text)
       gsap.to(imgBox, {
         yPercent: -15,

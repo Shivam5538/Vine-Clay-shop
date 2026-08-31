@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MenuItem } from "@/types";
 import { useCartStore } from "@/store/useCartStore";
-import { Plus, ShoppingBag } from "lucide-react";
+import { Plus } from "lucide-react";
 import { DrawUnderline } from "@/components/ui/DrawUnderline";
 
 interface ProductCardProps {

@@ -63,7 +63,7 @@ export function TestimonialsSection() {
 
               {/* Quote Content */}
               <p className="font-sans text-sm text-[#33241A]/85 leading-relaxed mb-6 font-normal">
-                "{rev.quote}"
+                &ldquo;{rev.quote}&rdquo;
               </p>
 
               {/* Author & Rating */}

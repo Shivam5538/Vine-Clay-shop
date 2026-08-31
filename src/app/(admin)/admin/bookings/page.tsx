@@ -9,13 +9,11 @@ import { StatCard } from "@/features/admin/components/StatCard";
 import { DateNavigator } from "@/features/admin/components/DateNavigator";
 
 import { AgendaView } from "@/features/admin/components/AgendaView";
-import { AdminTable, AdminBooking } from "@/features/admin/types/admin";
 import {
   CalendarDays,
   Plus,
   Users,
   CheckCircle2,
-  Clock,
   LayoutGrid,
   Sparkles,
   ChevronRight,
@@ -32,7 +30,6 @@ export default function AdminBookingsPage() {
     isLoaded,
     setNewBookingOpen,
     addTable,
-    toggleTableActive,
     updateBookingStatus,
     currentRole,
     addToast,
