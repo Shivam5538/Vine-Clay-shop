@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { CartItem, MenuItem, ReservationData } from "../types";
+import { CartItem, MenuItem, ReservationData, PlacedOrderSummary } from "../types";
 
 interface Toast {
   id: string;
@@ -27,6 +27,12 @@ interface CartStore {
   closeReservation: () => void;
   lastReservation: ReservationData | null;
   setLastReservation: (data: ReservationData) => void;
+
+  // Order Success Popup state
+  lastPlacedOrder: PlacedOrderSummary | null;
+  isOrderSuccessOpen: boolean;
+  openOrderSuccess: (order: PlacedOrderSummary) => void;
+  closeOrderSuccess: () => void;
 
   // Toasts
   toasts: Toast[];
@@ -91,6 +97,12 @@ export const useCartStore = create<CartStore>((set, get) => ({
   closeReservation: () => set({ isReservationOpen: false }),
   lastReservation: null,
   setLastReservation: (data) => set({ lastReservation: data }),
+
+  // Order Success Modal
+  lastPlacedOrder: null,
+  isOrderSuccessOpen: false,
+  openOrderSuccess: (order) => set({ lastPlacedOrder: order, isOrderSuccessOpen: true }),
+  closeOrderSuccess: () => set({ isOrderSuccessOpen: false }),
 
   // Toasts
   toasts: [],

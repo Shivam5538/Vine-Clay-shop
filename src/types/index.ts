@@ -36,3 +36,26 @@ export interface SentenceWord {
   color?: string; // e.g. '#C1633B' or '#33241A'
   svgMark?: "comma" | "cup" | "squiggle" | "leaf" | "star";
 }
+
+export interface PlacedOrderSummary {
+  orderNumber: string;
+  customerName: string;
+  customerPhone: string;
+  customerEmail?: string;
+  orderType: "pickup" | "delivery";
+  locationName: string;
+  locationAddress: string;
+  deliveryAddress?: string;
+  notes?: string;
+  items: Array<{
+    name: string;
+    quantity: number;
+    unitPrice: number;
+    image?: string;
+  }>;
+  subtotal: number;
+  tax: number;
+  total: number;
+  estimatedTime: string;
+  placedAt: string;
+}

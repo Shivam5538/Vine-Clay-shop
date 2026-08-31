@@ -4,6 +4,7 @@ import { SmoothScrollProvider } from "@/components/providers/SmoothScroll";
 import { Navbar } from "@/components/navigation/Navbar";
 import { CartDrawer } from "@/components/navigation/CartDrawer";
 import { ReservationModal } from "@/components/navigation/ReservationModal";
+import { OrderSuccessModal } from "@/components/navigation/OrderSuccessModal";
 import { MobileStickyBar } from "@/components/navigation/MobileStickyBar";
 import { ToastContainer } from "@/components/ui/ToastContainer";
 import { CoffeePreloader } from "@/components/ui/CoffeePreloader";
@@ -58,6 +59,7 @@ export default function Home() {
         <Navbar />
         <CartDrawer />
         <ReservationModal />
+        <OrderSuccessModal />
         <MobileStickyBar />
         <ToastContainer />
 

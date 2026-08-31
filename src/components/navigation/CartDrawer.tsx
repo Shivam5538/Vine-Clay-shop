@@ -25,8 +25,17 @@ import {
 import Image from "next/image";
 
 export function CartDrawer() {
-  const { isCartOpen, closeCart, items, updateQuantity, removeItem, getSubtotal, clearCart, addToast } =
-    useCartStore();
+  const {
+    isCartOpen,
+    closeCart,
+    items,
+    updateQuantity,
+    removeItem,
+    getSubtotal,
+    clearCart,
+    addToast,
+    openOrderSuccess,
+  } = useCartStore();
 
   const locations = useAdminStore((s) => s.locations);
 
@@ -96,24 +105,48 @@ export function CartDrawer() {
       // Sync into admin store immediately so admin dashboard shows the live ticket
       useAdminStore.getState().addOrderToStore(result.order as any);
 
-      setIsSuccess(true);
+      const placedOrderObj = result.order as any;
+      const chosenLoc = locations.find((l) => l.id === chosenLocId) || locations[0];
+
+      // Open the animated order confirmation modal
+      openOrderSuccess({
+        orderNumber: placedOrderObj.orderNumber || `#ORD-${String(placedOrderObj.id || Date.now()).slice(-4)}`,
+        customerName: customerName.trim(),
+        customerPhone: customerPhone.trim(),
+        customerEmail: customerEmail.trim() || undefined,
+        orderType,
+        locationName: chosenLoc?.name || "Vine & Clay — Mercer St Flagship",
+        locationAddress: chosenLoc?.address || "142 Mercer St, Soho, NY 10012",
+        deliveryAddress: deliveryAddress.trim() || undefined,
+        notes: combinedNotes || undefined,
+        items: items.map((i) => ({
+          name: i.product.name,
+          quantity: i.quantity,
+          unitPrice: i.product.price,
+          image: i.product.image,
+        })),
+        subtotal,
+        tax,
+        total,
+        estimatedTime: orderType === "delivery" ? "25–35 mins" : "12–18 mins",
+        placedAt: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      });
+
       addToast(
         orderType === "delivery"
           ? `Delivery order placed! We'll dispatch to ${customerName}.`
-          : `Order placed! Pick up at ${locations.find((l) => l.id === chosenLocId)?.name || "Vine & Clay Cafe"}.`,
+          : `Order placed! Pick up at ${chosenLoc?.name || "Vine & Clay Cafe"}.`,
         "success"
       );
 
-      setTimeout(() => {
-        clearCart();
-        setIsSuccess(false);
-        setCustomerName("");
-        setCustomerPhone("");
-        setCustomerEmail("");
-        setDeliveryAddress("");
-        setSpecialNotes("");
-        closeCart();
-      }, 2500);
+      clearCart();
+      setIsSuccess(false);
+      setCustomerName("");
+      setCustomerPhone("");
+      setCustomerEmail("");
+      setDeliveryAddress("");
+      setSpecialNotes("");
+      closeCart();
     } catch (err) {
       setIsSubmitting(false);
       const msg = err instanceof Error ? err.message : "Checkout failed. Please try again.";
