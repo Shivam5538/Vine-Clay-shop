@@ -149,7 +149,7 @@ export function HeroSection() {
       {/* Scroll Down Indicator */}
       <div className="flex justify-center pt-8">
         <a
-          href="#ingredient-strip"
+          href="#ticker-signature"
           className="flex items-center gap-2 text-xs font-mono uppercase tracking-widest text-[#33241A]/50 hover:text-[#C1633B] transition-colors"
         >
           <span>Scroll to Savor</span>
