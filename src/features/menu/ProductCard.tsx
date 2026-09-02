@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { MenuItem } from "@/types";
 import { useCartStore } from "@/store/useCartStore";
-import { Plus } from "lucide-react";
+import { Plus, Check } from "lucide-react";
 import { DrawUnderline } from "@/components/ui/DrawUnderline";
 
 interface ProductCardProps {
@@ -16,7 +16,14 @@ export function ProductCard({ item }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const [printedPrice, setPrintedPrice] = useState("");
   const [hasPrinted, setHasPrinted] = useState(false);
+  const [justAdded, setJustAdded] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+
+  const handleAdd = () => {
+    addItem(item);
+    setJustAdded(true);
+    setTimeout(() => setJustAdded(false), 1200);
+  };
 
   // Typewriter receipt price tag reveal (~30ms per char) when scrolled into view
   useEffect(() => {
@@ -102,11 +109,24 @@ export function ProductCard({ item }: ProductCardProps) {
         </span>
 
         <button
-          onClick={() => addItem(item)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-[#33241A] text-[#FBF6EF] hover:bg-[#C1633B] text-xs font-mono transition-colors focus:outline-none"
+          onClick={handleAdd}
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-xs font-mono transition-all duration-300 focus:outline-none cursor-pointer ${
+            justAdded
+              ? "bg-[#6B7548] text-[#FBF6EF] scale-105 shadow-sm"
+              : "bg-[#33241A] text-[#FBF6EF] hover:bg-[#C1633B]"
+          }`}
         >
-          <Plus className="w-3.5 h-3.5" />
-          <span>Add</span>
+          {justAdded ? (
+            <>
+              <Check className="w-3.5 h-3.5" />
+              <span>Added</span>
+            </>
+          ) : (
+            <>
+              <Plus className="w-3.5 h-3.5" />
+              <span>Add</span>
+            </>
+          )}
         </button>
       </div>
     </div>
