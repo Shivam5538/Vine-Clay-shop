@@ -79,20 +79,20 @@ export function CinematicCraftAccordion() {
     >
       {/* Dynamic Animated Ambient Glow-Up Background (Lights up when in view) */}
       <motion.div
-        initial={{ opacity: 0.2, scale: 0.85 }}
-        whileInView={{ opacity: 1, scale: 1.1 }}
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 1.4, ease: "easeOut" }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] sm:w-[1100px] h-[500px] sm:h-[650px] bg-radial from-[#C1633B]/30 via-[#E58253]/15 to-transparent rounded-full blur-[110px] sm:blur-[160px] pointer-events-none"
+        initial={{ opacity: 0.3, scale: 0.9 }}
+        whileInView={{ opacity: 1, scale: 1 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 1.0, ease: "easeOut" }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[850px] sm:w-[1100px] h-[500px] sm:h-[650px] bg-[radial-gradient(ellipse_at_center,rgba(193,99,59,0.32)_0%,rgba(229,130,83,0.15)_40%,transparent_70%)] pointer-events-none will-change-transform"
       />
 
       {/* Secondary Warm Olive/Clay Glow */}
       <motion.div
-        initial={{ opacity: 0.1 }}
+        initial={{ opacity: 0.2 }}
         whileInView={{ opacity: 0.8 }}
-        viewport={{ once: false, amount: 0.25 }}
-        transition={{ duration: 1.6, delay: 0.2, ease: "easeOut" }}
-        className="absolute bottom-6 right-0 w-[400px] sm:w-[600px] h-[350px] bg-radial from-[#D9BFA0]/20 via-[#6B7548]/15 to-transparent rounded-full blur-[100px] pointer-events-none"
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 1.2, delay: 0.1, ease: "easeOut" }}
+        className="absolute bottom-6 right-0 w-[400px] sm:w-[600px] h-[350px] bg-[radial-gradient(ellipse_at_center,rgba(217,191,160,0.22)_0%,rgba(107,117,72,0.15)_40%,transparent_70%)] pointer-events-none will-change-transform"
       />
 
       <div className="max-w-7xl mx-auto space-y-10 sm:space-y-12 relative z-10">

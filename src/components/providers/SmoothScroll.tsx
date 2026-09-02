@@ -2,6 +2,7 @@
 
 import { useEffect } from "react";
 import Lenis from "lenis";
+import "lenis/dist/lenis.css";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -16,16 +17,18 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.95, // Responsive, buttery smooth & fluid
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: "vertical",
+      gestureOrientation: "vertical",
       smoothWheel: true,
-      touchMultiplier: 1.5,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.0,
+      syncTouch: false, // Preserves 120Hz native touch fluidity on mobile
     });
 
-    lenis.on("scroll", () => {
-      ScrollTrigger.update();
-    });
+    // Synchronize Lenis with GSAP ScrollTrigger
+    lenis.on("scroll", ScrollTrigger.update);
 
     const updateLenis = (time: number) => {
       lenis.raf(time * 1000);
@@ -33,6 +36,13 @@ export function SmoothScrollProvider({ children }: { children: React.ReactNode }
 
     gsap.ticker.add(updateLenis);
     gsap.ticker.lagSmoothing(0);
+
+    // Refresh ScrollTrigger when fonts/images load to eliminate scroll height mismatch
+    if (document.fonts) {
+      document.fonts.ready.then(() => {
+        ScrollTrigger.refresh();
+      });
+    }
 
     return () => {
       gsap.ticker.remove(updateLenis);

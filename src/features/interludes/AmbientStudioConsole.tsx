@@ -69,7 +69,7 @@ export function AmbientStudioConsole() {
       className="relative w-full py-24 sm:py-32 px-6 md:px-12 bg-[#140D09] text-[#FBF6EF] overflow-hidden select-none border-t border-white/5"
     >
       {/* Background Terracotta Glowing Aurora */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-gradient-to-tr from-[#C1633B]/15 via-[#6B7548]/10 to-transparent rounded-full blur-[160px] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[600px] bg-[radial-gradient(ellipse_at_center,rgba(193,99,59,0.22)_0%,rgba(107,117,72,0.12)_40%,transparent_70%)] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto space-y-12 relative z-10">
         {/* Header */}

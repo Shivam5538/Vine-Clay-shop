@@ -51,6 +51,7 @@ export function SignatureTicker({ id, sentence }: SignatureTickerProps) {
         scrollTrigger: {
           trigger: container,
           pin: true,
+          anticipatePin: 1,
           scrub: 0.6, // physical weight & lag
           start: "top top",
           end: () => `+=${calcDistance() + window.innerHeight * 0.5}`,
